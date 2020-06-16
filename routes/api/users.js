@@ -6,10 +6,11 @@ const User = require('../../dbmodels/User');
 
 //@route POST api/users
 //@desc Register user
+//@ccess public
 router.post(
   '/',
   [
-    check('name', 'Name is required').not().isEmpty(),
+    check('first_name', 'First Name is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
   ],
   async (req, res) => {
@@ -19,7 +20,7 @@ router.post(
         errors: errors.array(),
       });
     }
-    const { name, email } = req.body;
+    const { last_name, first_name, email } = req.body;
     try {
       //see if the user exists
       let user = await User.findOne({
@@ -34,11 +35,13 @@ router.post(
           ],
         });
       }
-
-      user = new User({
-        name,
+      const newUser = new User({
+        first_name,
+        last_name,
         email,
       });
+      const addUser = await newUser.save()
+      res.json(addUser)
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
@@ -53,8 +56,6 @@ router.post(
 router.get('/', async (req, res) => {
   // destructure page and limit and set default values
   const { page = 1, limit = 10 } = req.query;
-  let prevPage = page - 1;
-  let nexPage = page + 1;
   try {
     // execute query with page and limit values
     const users = await User.find({})
