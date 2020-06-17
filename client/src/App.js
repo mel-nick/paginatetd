@@ -31,7 +31,7 @@ const App = () => {
           <input
             type='number'
             name='page'
-            onChange={(e) => setPage(JSON.parse(e.target.value))}
+            onChange={(e) => setPage(e.target.value)}
             placeholder='page number'
           />
         </div>{' '}
@@ -39,7 +39,7 @@ const App = () => {
           <input
             type='number'
             name='limit'
-            onChange={(e) => setLimit(JSON.parse(e.target.value))}
+            onChange={(e) => setLimit(e.target.value)}
             placeholder='page limit'
           />
         </div>{' '}
