@@ -44,14 +44,14 @@ router.post(
       res.json(addUser)
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      res.status(500).send('Server error'); 
     }
   }
 );
 
 //@route GET api/users
 //@desc GET all user
-//@ccess public
+//@ccess public 
 
 router.get('/', async (req, res) => {
   // destructure page and limit and set default values
