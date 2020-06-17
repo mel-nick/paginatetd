@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
 import UsersList from './components/UsersList';
+import Spinner from './components/Spinner';
 
 const App = () => {
   const [data, setData] = useState({});
@@ -24,7 +25,9 @@ const App = () => {
 
   const { currentPage, next, prev, totalPages, users } = data;
 
-  return (
+  return !users ? (
+    <Spinner />
+  ) : (
     <Fragment>
       <form className='selectors'>
         <div className='page-selector'>
@@ -34,7 +37,7 @@ const App = () => {
             onChange={(e) => setPage(e.target.value)}
             placeholder='page number'
           />
-        </div>{' '}
+        </div>
         <div className='limit-selector'>
           <input
             type='number'
@@ -42,38 +45,37 @@ const App = () => {
             onChange={(e) => setLimit(e.target.value)}
             placeholder='page limit'
           />
-        </div>{' '}
+        </div>
       </form>
       <UsersList users={users} />
       <div className='controls'>
         <div className='button-container'>
-          {' '}
           {prev && (
             <button
               className='btn prev-btn'
               onClick={() => fetchNewUsers(prev)}
             >
-              prev{' '}
+              prev
             </button>
-          )}{' '}
+          )}
           {next && (
             <button
               className='btn next-btn'
               onClick={() => fetchNewUsers(next)}
             >
-              next{' '}
+              next
             </button>
-          )}{' '}
-        </div>{' '}
+          )}
+        </div>
         <div>
           <span className='page-info'> current page </span> -{' '}
-          <span className='current-page'> {currentPage} </span>{' '}
-        </div>{' '}
+          <span className='current-page'> {currentPage} </span>
+        </div>
         <div>
           <span className='page-info'> total pages </span> -{' '}
-          <span className='total-pages'> {totalPages} </span>{' '}
-        </div>{' '}
-      </div>{' '}
+          <span className='total-pages'> {totalPages} </span>
+        </div>
+      </div>
     </Fragment>
   );
 };
