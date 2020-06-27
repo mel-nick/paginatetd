@@ -7,7 +7,7 @@ React <br>
 Node
 
 # API response
-```javascript
+```json
 
 {
     "prev": null,
