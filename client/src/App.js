@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import UsersList from './components/UsersList';
 import Spinner from './components/Spinner';
+import Button from './components/Button';
 
 const App = () => {
   const [data, setData] = useState({});
@@ -51,20 +52,21 @@ const App = () => {
       <div className='controls'>
         <div className='button-container'>
           {prev && (
-            <button
+            <Button
               className='btn prev-btn'
-              onClick={() => fetchNewUsers(prev)}
+              handleClick={() => fetchNewUsers(prev)}
             >
               prev
-            </button>
+            </Button>
           )}
           {next && (
-            <button
+            <Button
               className='btn next-btn'
-              onClick={() => fetchNewUsers(next)}
+              handleClick={() => fetchNewUsers(next)}
             >
+              {' '}
               next
-            </button>
+            </Button>
           )}
         </div>
         <div>

@@ -40,18 +40,18 @@ router.post(
         last_name,
         email,
       });
-      const addUser = await newUser.save()
-      res.json(addUser)
+      const addUser = await newUser.save();
+      res.json(addUser);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error'); 
+      res.status(500).send('Server error');
     }
   }
 );
 
 //@route GET api/users
 //@desc GET all user
-//@ccess public 
+//@ccess public
 
 router.get('/', async (req, res) => {
   // destructure page and limit and set default values
@@ -59,6 +59,7 @@ router.get('/', async (req, res) => {
   try {
     // execute query with page and limit values
     const users = await User.find({})
+      .sort({ _id: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
