@@ -1,28 +1,43 @@
-import React, { Fragment, useState, useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { Fragment, useState, useEffect, useCallback } from 'react';
 import './App.css';
 import axios from 'axios';
 import UsersList from './components/UsersList';
 import Spinner from './components/Spinner';
 import Button from './components/Button';
+import SearchBar from './components/SearchBar';
 
 const App = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const url = `/api/users?page=${page}&limit=${limit}`;
-      const result = await axios.get(url);
-      setData(result.data);
-    };
-    fetchData();
+  const [searchString, setSearchString] = useState('');
+
+  const fetchUsers = useCallback(async () => {
+    const url = `/api/users?page=${page}&limit=${limit}`;
+    const result = await axios.get(url);
+    setData(result.data);
   }, [limit, page]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const fetchNewUsers = async (url) => {
     let res = await axios.get(url);
     setData(res.data);
   };
+
+  const searchUsers = useCallback(async () => {
+    const searchUsersUrl = `/api/users/search?q=${searchString}`;
+    const result = await axios.get(searchUsersUrl);
+    setData(result.data);
+  }, [searchString]);
+
+  useEffect(() => {
+    searchString && searchUsers();
+  }, [searchString, searchUsers]);
 
   const { currentPage, next, prev, totalPages, users } = data;
 
@@ -30,7 +45,8 @@ const App = () => {
     <Spinner />
   ) : (
     <Fragment>
-      <form className='selectors'>
+      <SearchBar setSearchString={setSearchString} fetchUsers={fetchUsers} />
+      {/* <form className='selectors'>
         <div className='page-selector'>
           <input
             type='number'
@@ -47,7 +63,7 @@ const App = () => {
             placeholder='page limit'
           />
         </div>
-      </form>
+      </form> */}
       <UsersList users={users} />
       <div className='controls'>
         <div className='button-container'>
