@@ -25,6 +25,7 @@ app.use(function (req, res, next) {
 
 //define routes
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/search', require('./routes/api/search'));
 
 //serve statisc assets
 app.use(express.static(path.join(__dirname, '/client/build')));

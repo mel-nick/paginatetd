@@ -30,7 +30,7 @@ const App = () => {
   };
 
   const searchUsers = useCallback(async () => {
-    const searchUsersUrl = `/api/users/search?q=${searchString}`;
+    const searchUsersUrl = `/api/search/users?q=${searchString}`;
     const result = await axios.get(searchUsersUrl);
     setData(result.data);
   }, [searchString]);
