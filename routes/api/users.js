@@ -22,7 +22,7 @@ router.post(
     }
     const { last_name, first_name, email } = req.body;
     try {
-      //see if the user exists
+      //check if the user exists
       let user = await User.findOne({
         email,
       });
@@ -50,24 +50,25 @@ router.post(
 );
 
 //@route GET api/users
-//@desc GET all user
+//@desc GET all users
 //@ccess public
 
 router.get('/', async (req, res) => {
-  // destructure page and limit and set default values
   const { page = 1, limit = 10 } = req.query;
   try {
-    // execute query with page and limit values
+    //@ get all users from DB to be paginated
     const users = await User.find({})
       .sort({ _id: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
 
-    // get total documents in the Users collection
+    //@ get total documents count
+
     const count = await User.countDocuments();
     let pagesTotal = Math.ceil(count / limit);
-    // return response with prev/next links, users, total pages, and current page
+
+    //@ response with prev/next links, users, total pages, and current page
     res.json({
       prev:
         page > 1
@@ -86,12 +87,13 @@ router.get('/', async (req, res) => {
   }
 });
 
+//@route GET api/users/search
+//@desc GET all users matches search criteria
+//@ccess public
 router.get('/search', async (req, res) => {
-  const q = req.query.q;
-
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, q } = req.query;
   try {
-    // execute query with page and limit values
+    //@ search for users and get response to be paginated
 
     const users = await User.find({
       $or: [
@@ -105,7 +107,8 @@ router.get('/search', async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
-    // get total documents in the Users collection
+    //@ get count of documents have been found
+
     const count = await User.countDocuments({
       $or: [
         { first_name: { $regex: q, $options: 'i' } },
@@ -114,7 +117,9 @@ router.get('/search', async (req, res) => {
       ],
     });
     let pagesTotal = Math.ceil(count / limit);
-    // return response with prev/next links, users, total pages, and current page
+
+    //@ return response with prev/next links, users, total pages, and current page
+
     res.json({
       prev:
         page > 1
